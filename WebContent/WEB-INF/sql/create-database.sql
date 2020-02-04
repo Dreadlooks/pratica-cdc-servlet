@@ -1,0 +1,1 @@
+create database pratica_cdc;
