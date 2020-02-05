@@ -1,4 +1,4 @@
-package br.com.caelum.shared;
+package br.com.caelum.cdc.shared;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

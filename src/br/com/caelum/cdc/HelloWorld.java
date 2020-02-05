@@ -1,4 +1,4 @@
-package br.com.caelum;
+package br.com.caelum.cdc;
 
 import java.io.IOException;
 
