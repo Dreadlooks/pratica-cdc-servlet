@@ -24,7 +24,6 @@ public class RequestProcessor {
 		//GET THE FIELDS THAT EXISTS IN YOUR CLASS
 		List<Field> fields = Arrays.asList(dtoClazz.getDeclaredFields());
 		fields.stream().forEach(field -> {
-			field.setAccessible(true);
 			//GET THE PARAMETERS FROM REQUEST
 			request.getParameterMap().forEach((key, value) -> {
 				//VERIFY IF THE NAME IS EQUAL TO THE REQUEST KEY
@@ -38,7 +37,6 @@ public class RequestProcessor {
 				}
 			});
 		});
-
 		
 		//GET THE SETTER METHODS
 		Set<Method> setters = Arrays.asList(dtoClazz.getMethods()).stream().filter(m -> m.getName().startsWith("set"))
