@@ -2,11 +2,11 @@ package br.com.caelum.cdc.model;
 
 public class Author {
 	
+	private Long id;
 	private String name;
 	private String description;
-	
+
 	public Author() {
-		super();
 	}
 
 	public Author(String name, String description) {
@@ -14,7 +14,11 @@ public class Author {
 		this.name = name;
 		this.description = description;
 	}
-	
+
+	public Long getId() {
+		return id;
+	}
+
 	public String getName() {
 		return name;
 	}
