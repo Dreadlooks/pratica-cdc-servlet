@@ -16,15 +16,7 @@ public class RequestProcessor {
 
 	public static <T extends Object> T process(HttpServletRequest request, Class<T> dtoClazz) {
 		
-		Object object;
-		
-		try {
-			object = dtoClazz.getDeclaredConstructor().newInstance();
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e1) {
-			// TODO Auto-generated catch block
-			throw new RuntimeException(e1);
-		}
+		Object object = getClazzInstance(dtoClazz);
 
 		//DTO
 		Map<String, Object> dtoParameters = new HashMap<String, Object>();
@@ -87,6 +79,16 @@ public class RequestProcessor {
 		});
 
 		return dtoClazz.cast(object);
+	}
+	
+	private static Object getClazzInstance(Class<?> clazz) {
+		try {
+			return clazz.getDeclaredConstructor().newInstance();		
+		} catch (InstantiationException | IllegalAccessException 
+				| IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {			
+			throw new RuntimeException(e);
+		}
 	}
 	
 	private static String getSetterNameFromParameterKey(String param) {
