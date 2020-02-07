@@ -6,8 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import br.com.caelum.cdc.model.Author;
+import br.com.caelum.cdc.model.AuthorDto;
 import br.com.caelum.cdc.model.AuthorOutputDto;
 import br.com.caelum.cdc.shared.ConnectionFactory;
 
@@ -57,5 +59,29 @@ public class AuthorDao {
 		
 		return authors;
 	}
+	
+	
+	public boolean findByName(String name) {
+		String sql = "select * from author where name = ?";
+		
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, name);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				return true;
+			}
+			
+		
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	} 
 
 }

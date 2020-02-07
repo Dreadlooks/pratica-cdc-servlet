@@ -18,10 +18,12 @@ import br.com.caelum.cdc.shared.validators.ValidatorsUtil;
 public class AuthorAddServlet extends HttpServlet {
 
 	private ValidatorsUtil validatorsUtil;
+	private UniqueAuthorNameValidator uniqueAuthorNameValidator;
 	private AuthorDao authorDao;
 
 	public AuthorAddServlet() {
 		this.validatorsUtil = new ValidatorsUtil();
+		this.uniqueAuthorNameValidator = new UniqueAuthorNameValidator();
 		this.authorDao = new AuthorDao();
 	}
 
@@ -38,9 +40,11 @@ public class AuthorAddServlet extends HttpServlet {
 
 		AuthorDto authorDto = RequestProcessor.process(request, AuthorDto.class);
 		validatorsUtil.validate(authorDto);
+		uniqueAuthorNameValidator.checkUniqueKey(authorDto.getName());		
 		
-		if (validatorsUtil.hasErrors()) {
+		if (validatorsUtil.hasErrors() || uniqueAuthorNameValidator.isInvalid()) {
 			request.setAttribute("authorDto", authorDto);
+			request.setAttribute("unique", uniqueAuthorNameValidator.getError());
 			request.setAttribute("errors", validatorsUtil.getErrors());
 
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/author/new-form.jsp");
