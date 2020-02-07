@@ -38,7 +38,7 @@ public class AuthorAddServlet extends HttpServlet {
 
 		AuthorDto authorDto = RequestProcessor.process(request, AuthorDto.class);
 		validatorsUtil.validate(authorDto);
-
+		
 		if (validatorsUtil.hasErrors()) {
 			request.setAttribute("authorDto", authorDto);
 			request.setAttribute("errors", validatorsUtil.getErrors());
