@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,16 +9,26 @@
 </head>
 <body>
 
-<h1>Cadastro de autores</h1>
-<form action="/pratica-cdc-servlet/author" method="post">
+	<h1>Cadastro de autores</h1>
 
-	<p>Name:</p> <input type="text" name="name">
-	<p>Description:</p> <textarea name="description"> </textarea>
+	<c:if test="${not empty errors}">
+		<c:forEach items="${errors}" var="error">
+			<c:out value="${error.key} :" />
+			<c:out value="${error.value}" />
+		</c:forEach>
+	</c:if>
 
-	<br/>
-	<br/>
-	<input type="submit">
-</form>
+	<form action="/pratica-cdc-servlet/author" method="post">
+
+		<p>Name:</p>
+		<input type="text" name="name" value="${authorDto.name}">
+		<p>Description:</p>
+		<textarea name="description">${authorDto.description}</textarea>
+
+		<br />
+		<br />
+		<input type="submit">
+	</form>
 
 </body>
 </html>

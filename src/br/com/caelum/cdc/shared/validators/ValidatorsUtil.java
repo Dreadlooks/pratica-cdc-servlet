@@ -38,6 +38,8 @@ public class ValidatorsUtil {
 			hasErrors = true;
 			errors.put(field.getName(), "O campo deve conter algo entre "
 						+ minSize + " e " + maxSize + " caracteres!");
+		} else {
+			hasErrors = false;
 		}
 	}
 
