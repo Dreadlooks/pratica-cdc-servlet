@@ -17,7 +17,7 @@ public class UniqueAuthorNameValidator {
 
 	public void checkUniqueKey(String name) {
 		if (authorDao.findByName(name).isPresent()) {
-			setInvalid(true);
+			this.isInvalid = true;
 			error.put("name:", name + " já está em uso!");
 		}
 	}
@@ -25,11 +25,7 @@ public class UniqueAuthorNameValidator {
 	public boolean isInvalid() {
 		return isInvalid;
 	}
-
-	private void setInvalid(boolean isInvalid) {
-		this.isInvalid = isInvalid;
-	}
-
+	
 	public Map<String, String> getError() {
 		return error;
 	}
