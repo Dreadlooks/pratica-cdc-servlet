@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 import br.com.caelum.cdc.model.Author;
-import br.com.caelum.cdc.model.AuthorOutputDto;
 import br.com.caelum.cdc.shared.ConnectionFactory;
 
 public class AuthorDao {
@@ -34,17 +33,17 @@ public class AuthorDao {
 		}
 	}
 
-	public List<AuthorOutputDto> findAll() {
+	public List<Author> findAll() {
 		String sql = "select * from author";
-		List<AuthorOutputDto> authors = new ArrayList<>();
+		List<Author> authors = new ArrayList<>();
 
 		try {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				AuthorOutputDto author = new AuthorOutputDto(rs.getLong("id"), 
-						rs.getString("name"), rs.getString("description"));
+				Author author = new Author(rs.getString("name"), rs.getString("description"));
+				author.setId(rs.getLong("id"));
 				
 				authors.add(author);
 			}
@@ -58,8 +57,8 @@ public class AuthorDao {
 	}
 	
 	
-	public Optional<AuthorOutputDto> findByName(String name) {
-		Optional<AuthorOutputDto> possibleAuthor = Optional.empty();
+	public Optional<Author> findByName(String name) {
+		Optional<Author> possibleAuthor = Optional.empty();
 		String sql = "select * from author where name = ?";
 		
 		try {
@@ -69,8 +68,9 @@ public class AuthorDao {
 			ResultSet rs = stmt.executeQuery();
 			
 			if(rs.next()) {
-				possibleAuthor = Optional.of(new AuthorOutputDto(rs.getLong("id"), 
-						rs.getString("name"), rs.getString("description")));
+				Author author = new Author(rs.getString("name"), rs.getString("description"));
+				author.setId(rs.getLong("id"));
+				possibleAuthor = Optional.of(author);
 			}
 			
 			rs.close();

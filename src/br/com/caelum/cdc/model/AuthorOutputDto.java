@@ -6,11 +6,10 @@ public class AuthorOutputDto {
 	private String name;
 	private String description;
 	
-	public AuthorOutputDto(Long id, String name, String description) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.description = description;
+	public AuthorOutputDto(Author author) {
+		this.id = author.getId();
+		this.name = author.getName();
+		this.description = author.getDescription() ;
 	}
 	
 	public Long getId() {
