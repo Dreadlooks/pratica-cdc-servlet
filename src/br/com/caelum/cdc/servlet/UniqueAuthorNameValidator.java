@@ -16,7 +16,7 @@ public class UniqueAuthorNameValidator {
 	}
 
 	public void checkUniqueKey(String name) {
-		if (authorDao.findByName(name)) {
+		if (authorDao.findByName(name).isPresent()) {
 			setInvalid(true);
 			error.put("name:", name + " já está em uso!");
 		}

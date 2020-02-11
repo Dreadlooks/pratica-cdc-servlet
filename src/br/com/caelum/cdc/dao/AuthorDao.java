@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 import br.com.caelum.cdc.model.Author;
-import br.com.caelum.cdc.model.AuthorDto;
 import br.com.caelum.cdc.model.AuthorOutputDto;
 import br.com.caelum.cdc.shared.ConnectionFactory;
 
@@ -31,8 +30,7 @@ public class AuthorDao {
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -53,15 +51,15 @@ public class AuthorDao {
 			rs.close();
 			stmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		
 		return authors;
 	}
 	
 	
-	public boolean findByName(String name) {
+	public Optional<AuthorOutputDto> findByName(String name) {
+		Optional<AuthorOutputDto> possibleAuthor = Optional.empty();
 		String sql = "select * from author where name = ?";
 		
 		try {
@@ -71,17 +69,17 @@ public class AuthorDao {
 			ResultSet rs = stmt.executeQuery();
 			
 			if(rs.next()) {
-				return true;
+				possibleAuthor = Optional.of(new AuthorOutputDto(rs.getLong("id"), 
+						rs.getString("name"), rs.getString("description")));
 			}
 			
-		
-			
+			rs.close();
+			stmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		
-		return false;
+		return possibleAuthor;
 	} 
 
 }
