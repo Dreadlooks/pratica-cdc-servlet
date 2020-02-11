@@ -6,9 +6,6 @@ public class Author {
 	private String name;
 	private String description;
 
-	public Author() {
-	}
-	
 	public Author(String name, String description) {
 		super();
 		this.name = name;
