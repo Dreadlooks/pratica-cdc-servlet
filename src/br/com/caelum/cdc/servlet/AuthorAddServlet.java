@@ -39,6 +39,7 @@ public class AuthorAddServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		AuthorDto authorDto = RequestProcessor.process(request, AuthorDto.class);
+		System.out.println(authorDto.getTestinho());
 		validatorsUtil.validate(authorDto);
 		uniqueAuthorNameValidator.checkUniqueKey(authorDto.getName());		
 		
@@ -47,8 +48,7 @@ public class AuthorAddServlet extends HttpServlet {
 			request.setAttribute("unique", uniqueAuthorNameValidator.getError());
 			request.setAttribute("errors", validatorsUtil.getErrors());
 
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/author/new-form.jsp");
-			rd.forward(request, response);
+			doGet(request, response);
 		} else {
 			authorDao.save(authorDto.toModel());
 			
