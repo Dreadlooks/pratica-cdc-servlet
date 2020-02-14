@@ -1,8 +1,11 @@
 package br.com.caelum.cdc.model;
 
+import br.com.caelum.cdc.shared.annotations.Size;
+
 public class Author {
 	
 	private Long id;
+	@Size(max = 100)
 	private String name;
 	private String description;
 
