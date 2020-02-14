@@ -1,5 +1,6 @@
 package br.com.caelum.cdc.servlet;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +12,8 @@ public class UniqueAuthorNameValidator {
 	private boolean isInvalid;
 	private static Map<String, String> error = new HashMap<>();
 	
-	public UniqueAuthorNameValidator() {
-		this.authorDao = new AuthorDao();
+	public UniqueAuthorNameValidator(Connection connection) {
+		this.authorDao = new AuthorDao(connection);
 	}
 
 	public void checkUniqueKey(String name) {

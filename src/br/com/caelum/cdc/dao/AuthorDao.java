@@ -9,14 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 import br.com.caelum.cdc.model.Author;
-import br.com.caelum.cdc.shared.ConnectionFactory;
 
 public class AuthorDao {
 
 	private Connection conn;
 
-	public AuthorDao() {
-		this.conn = new ConnectionFactory().getConnection();
+	public AuthorDao(Connection connection) {
+		this.conn = connection;
 	}
 
 	public void save(Author author) {

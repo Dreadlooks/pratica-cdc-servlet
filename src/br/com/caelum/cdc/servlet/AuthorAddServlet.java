@@ -1,6 +1,7 @@
 package br.com.caelum.cdc.servlet;
 
 import java.io.IOException;
+import java.sql.Connection;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,13 +19,9 @@ import br.com.caelum.cdc.shared.validators.ValidatorsUtil;
 public class AuthorAddServlet extends HttpServlet {
 
 	private ValidatorsUtil validatorsUtil;
-	private UniqueAuthorNameValidator uniqueAuthorNameValidator;
-	private AuthorDao authorDao;
 
 	public AuthorAddServlet() {
 		this.validatorsUtil = new ValidatorsUtil();
-		this.uniqueAuthorNameValidator = new UniqueAuthorNameValidator();
-		this.authorDao = new AuthorDao();
 	}
 
 	@Override
@@ -37,10 +34,11 @@ public class AuthorAddServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		Connection connection = (Connection) request.getAttribute("connection");
+		AuthorDao authorDao = new AuthorDao(connection);
 		AuthorDto authorDto = RequestProcessor.process(request, AuthorDto.class);
-		System.out.println(authorDto.getTestinho());
 		validatorsUtil.validate(authorDto);
+		UniqueAuthorNameValidator uniqueAuthorNameValidator = new UniqueAuthorNameValidator(connection);
 		uniqueAuthorNameValidator.checkUniqueKey(authorDto.getName());		
 		
 		if (validatorsUtil.hasErrors() || uniqueAuthorNameValidator.isInvalid()) {

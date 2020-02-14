@@ -1,6 +1,7 @@
 package br.com.caelum.cdc.servlet;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.stream.Collectors;
 
 import javax.servlet.RequestDispatcher;
@@ -16,15 +17,11 @@ import br.com.caelum.cdc.model.AuthorOutputDto;
 @WebServlet("/authors")
 public class AuthorListServlet extends HttpServlet {
 
-	private AuthorDao authorDao;
-	
-	public AuthorListServlet() {
-		this.authorDao = new AuthorDao();
-	}
-
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+		Connection connection = (Connection) request.getAttribute("connection");
+		
+		AuthorDao authorDao = new AuthorDao(connection);
 		request.setAttribute("authors", authorDao.findAll()
 				.stream().map(AuthorOutputDto::new).collect(Collectors.toList()));
 		
