@@ -18,28 +18,8 @@ public class ValidatorsUtil {
 		for (Field field : clazz.getDeclaredFields()) {
 			field.setAccessible(true);
 			if (field.isAnnotationPresent(Size.class)) {
-				verifySize(field, object);
+				hasErrors = SizeVerificator.verify(field, object, errors);
 			}
-		}
-	}
-
-	private void verifySize(Field field, Object object) {
-		String word = "";
-		try {
-			word = field.get(object).toString();
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-
-		int maxSize = field.getAnnotation(Size.class).max();
-		int minSize = field.getAnnotation(Size.class).min();
-
-		if (word.length() < minSize || word.length() > maxSize) {
-			hasErrors = true;
-			errors.put(field.getName(), "O campo deve conter algo entre "
-						+ minSize + " e " + maxSize + " caracteres!");
-		} else {
-			hasErrors = false;
 		}
 	}
 
