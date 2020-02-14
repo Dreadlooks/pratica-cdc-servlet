@@ -38,7 +38,7 @@ public class AuthorAddServlet extends HttpServlet {
 		AuthorDao authorDao = new AuthorDao(connection);
 		AuthorDto authorDto = RequestProcessor.process(request, AuthorDto.class);
 		validatorsUtil.validate(authorDto);
-		UniqueAuthorNameValidator uniqueAuthorNameValidator = new UniqueAuthorNameValidator(connection);
+		UniqueAuthorNameValidator uniqueAuthorNameValidator = new UniqueAuthorNameValidator(authorDao);
 		uniqueAuthorNameValidator.checkUniqueKey(authorDto.getName());		
 		
 		if (validatorsUtil.hasErrors() || uniqueAuthorNameValidator.isInvalid()) {

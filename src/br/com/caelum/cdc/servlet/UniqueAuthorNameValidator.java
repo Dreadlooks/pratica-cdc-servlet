@@ -12,8 +12,8 @@ public class UniqueAuthorNameValidator {
 	private boolean isInvalid;
 	private static Map<String, String> error = new HashMap<>();
 	
-	public UniqueAuthorNameValidator(Connection connection) {
-		this.authorDao = new AuthorDao(connection);
+	public UniqueAuthorNameValidator(AuthorDao authorDao) {
+		this.authorDao = authorDao;
 	}
 
 	public void checkUniqueKey(String name) {
