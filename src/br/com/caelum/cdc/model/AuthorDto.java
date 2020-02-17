@@ -1,11 +1,14 @@
 package br.com.caelum.cdc.model;
 
+import br.com.caelum.cdc.shared.annotations.NotBlank;
 import br.com.caelum.cdc.shared.annotations.Size;
 
 public class AuthorDto {
 
-	@Size(max = 100)
+	@Size(max = 100, min = 1)
 	private String name;
+	
+	@NotBlank
 	private String description;
 
 	public String getName() {
