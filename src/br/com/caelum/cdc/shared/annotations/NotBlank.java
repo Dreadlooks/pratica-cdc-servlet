@@ -5,12 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import br.com.caelum.cdc.shared.validators.SizeVerificator;
+import br.com.caelum.cdc.shared.validators.NotBlankVerificator;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@ValidationAnnotation(getValidatorClass = SizeVerificator.class)
-public @interface Size {
-	int min() default 0;
-	int max();
+@ValidationAnnotation(getValidatorClass = NotBlankVerificator.class)
+public @interface NotBlank {
 }
