@@ -1,33 +1,21 @@
 package br.com.caelum.cdc.servlet;
 
-import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
-
 import br.com.caelum.cdc.dao.AuthorDao;
+import br.com.caelum.cdc.shared.errors.BindingResult;
 
 public class UniqueAuthorNameValidator {
 
 	private AuthorDao authorDao;
-	private boolean isInvalid;
-	private static Map<String, String> error = new HashMap<>();
+	private BindingResult result;
 	
-	public UniqueAuthorNameValidator(AuthorDao authorDao) {
+	public UniqueAuthorNameValidator(AuthorDao authorDao, BindingResult result) {
 		this.authorDao = authorDao;
+		this.result = result;
 	}
 
 	public void checkUniqueKey(String name) {
 		if (authorDao.findByName(name).isPresent()) {
-			this.isInvalid = true;
-			error.put("name:", name + " já está em uso!");
+			result.addError("name", "Já existe um autor com este nome -> " + name);
 		}
-	}
-
-	public boolean isInvalid() {
-		return isInvalid;
-	}
-	
-	public Map<String, String> getError() {
-		return error;
 	}
 }
