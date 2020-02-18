@@ -11,11 +11,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import br.com.caelum.cdc.shared.annotations.ValidationAnnotation;
+import br.com.caelum.cdc.shared.errors.BindingResult;
 
 public class ValidatorsUtil {
 
 	private static Map<String, String> errors = new HashMap<>();
 	private static boolean hasErrors;
+	private BindingResult result;
+
+	public ValidatorsUtil(BindingResult result) {
+		this.result = result;
+	}
 
 	public <T> void validate(T object) {
 
@@ -36,10 +42,9 @@ public class ValidatorsUtil {
 					ConstraintValidator validator = validationClass.getConstructor().newInstance();
 					Optional<String> errorMessage = validator.valid(field, object);
 					if (errorMessage.isPresent()) {
-						hasErrors = true;
-						errors.put(field.getName(), errorMessage.get());
+						result.addError(field.getName(), errorMessage.get());
 					} else {
-						errors.remove(field.getName());
+						result.removeError(field.getName());
 					}
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
@@ -48,17 +53,5 @@ public class ValidatorsUtil {
 				}
 			});
 		}
-
-		if (errors.isEmpty()) {
-			hasErrors = false;
-		}
-	}
-
-	public boolean hasErrors() {
-		return hasErrors;
-	}
-
-	public Map<String, String> getErrors() {
-		return errors;
 	}
 }
