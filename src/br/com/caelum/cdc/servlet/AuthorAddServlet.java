@@ -13,16 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.caelum.cdc.dao.AuthorDao;
 import br.com.caelum.cdc.model.AuthorDto;
 import br.com.caelum.cdc.shared.RequestProcessor;
+import br.com.caelum.cdc.shared.errors.BindingResult;
+import br.com.caelum.cdc.shared.errors.ConcreteBindingResult;
 import br.com.caelum.cdc.shared.validators.ValidatorsUtil;
 
 @WebServlet("/author")
 public class AuthorAddServlet extends HttpServlet {
-
-	private ValidatorsUtil validatorsUtil;
-
-	public AuthorAddServlet() {
-		this.validatorsUtil = new ValidatorsUtil();
-	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,16 +31,18 @@ public class AuthorAddServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Connection connection = (Connection) request.getAttribute("connection");
+		BindingResult result = (ConcreteBindingResult) request.getAttribute("bindingResult");
 		AuthorDao authorDao = new AuthorDao(connection);
+		ValidatorsUtil validatorsUtil = new ValidatorsUtil(result);
+		UniqueAuthorNameValidator uniqueAuthorNameValidator = new UniqueAuthorNameValidator(authorDao, result);
+		
 		AuthorDto authorDto = RequestProcessor.process(request, AuthorDto.class);
 		validatorsUtil.validate(authorDto);
-		UniqueAuthorNameValidator uniqueAuthorNameValidator = new UniqueAuthorNameValidator(authorDao);
 		uniqueAuthorNameValidator.checkUniqueKey(authorDto.getName());		
 		
-		if (validatorsUtil.hasErrors() || uniqueAuthorNameValidator.isInvalid()) {
+		if (result.hasErrors()) {
 			request.setAttribute("authorDto", authorDto);
-			request.setAttribute("unique", uniqueAuthorNameValidator.getError());
-			request.setAttribute("errors", validatorsUtil.getErrors());
+			request.setAttribute("errors", result.getErrors());
 
 			doGet(request, response);
 		} else {

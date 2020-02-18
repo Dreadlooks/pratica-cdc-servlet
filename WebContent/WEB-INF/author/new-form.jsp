@@ -10,13 +10,6 @@
 <body>
 
 	<h1>Cadastro de autores</h1>
-	
-	<c:if test="${not empty unique}">
-		<c:forEach items="${unique}" var="unique">
-			<c:out value="${unique.key}" />
-			<c:out value="${unique.value}" />
-		</c:forEach>
-	</c:if>
 
 	<c:if test="${not empty errors}">
 		<c:forEach items="${errors}" var="error">
