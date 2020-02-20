@@ -14,7 +14,7 @@ import javax.servlet.annotation.WebFilter;
 import br.com.caelum.cdc.shared.errors.BindingResult;
 import br.com.caelum.cdc.shared.errors.ConcreteBindingResult;
 
-//@WebFilter("/author")
+@WebFilter("/*")
 public class BindingResultFilter implements Filter {
 	private static Logger logger = Logger.getLogger("bindingResultFilter");
 
@@ -27,7 +27,7 @@ public class BindingResultFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filter)
 			throws IOException, ServletException {
-		BindingResult result = (BindingResult) new ConcreteBindingResult();
+		BindingResult result = new ConcreteBindingResult();
 		request.setAttribute("bindingResult", result);
 		
 		logger.info("Adding binding result!");
