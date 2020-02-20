@@ -43,8 +43,6 @@ public class ValidatorsUtil {
 					Optional<String> errorMessage = validator.valid(field, object);
 					if (errorMessage.isPresent()) {
 						result.addError(field.getName(), errorMessage.get());
-					} else {
-						result.removeError(field.getName());
 					}
 				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
