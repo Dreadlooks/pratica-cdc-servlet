@@ -31,7 +31,7 @@ public class AuthorAddServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Connection connection = (Connection) request.getAttribute("connection");
-		BindingResult result = (ConcreteBindingResult) request.getAttribute("bindingResult");
+		BindingResult result = (BindingResult) request.getAttribute("bindingResult");
 		AuthorDao authorDao = new AuthorDao(connection);
 		ValidatorsUtil validatorsUtil = new ValidatorsUtil(result);
 		UniqueAuthorNameValidator uniqueAuthorNameValidator = new UniqueAuthorNameValidator(authorDao, result);
