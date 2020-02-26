@@ -4,7 +4,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,11 +14,16 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 public class RequestProcessor {
-
+	
+	static Map<Class, Converter> converters = new HashMap<>() {{
+		put(String.class, new StringConverter());
+		put(double.class, new PrimitiveDoubleToDouble());
+	}};
+	
 	public static <T extends Object> T process(HttpServletRequest request, Class<T> dtoClazz) {
 
 		Object object = getClazzInstance(dtoClazz);
-
+		
 		// GET THE FIELDS THAT EXISTS IN YOUR CLASS
 		List<Field> fields = Arrays.asList(dtoClazz.getDeclaredFields());
 		fields.stream().forEach(field -> {
@@ -24,15 +31,11 @@ public class RequestProcessor {
 			request.getParameterMap().forEach((key, value) -> {
 				// VERIFY IF THE NAME IS EQUAL TO THE REQUEST KEY
 				if (field.getName().equalsIgnoreCase(key)) {
-					Converter converter;
-					// VERIFY THE TYPE OF THE PARAMETER
-					if (field.getType().isAssignableFrom(String.class)) {
-						 converter = new StringConverter();
-						 populateClass(object, dtoClazz, key, value[0], converter);
-					} else if (field.getType().isAssignableFrom(double.class)) {
-						 converter = new PrimitiveDoubleToDouble();
-						 populateClass(object, dtoClazz, key, value[0], converter);
-					}
+					converters.entrySet().stream().forEach(converterMap -> {
+						if (field.getType().isAssignableFrom(converterMap.getKey())) {
+							 populateClass(object, dtoClazz, key, value[0], converterMap.getKey(), converterMap.getValue());
+						}
+					});
 				}
 			});
 		});
@@ -40,7 +43,7 @@ public class RequestProcessor {
 		return dtoClazz.cast(object);
 	}
 	
-	private static void populateClass(Object object, Class<?> dtoClazz, String key, String stringValue, Converter converter) {
+	private static void populateClass(Object object, Class<?> dtoClazz, String key, String stringValue, Class clazz, Converter converter) {
 		Set<Method> setters = Arrays.asList(dtoClazz.getMethods()).stream().filter(m -> m.getName().startsWith("set"))
 				.collect(Collectors.toSet());
 		
@@ -52,7 +55,7 @@ public class RequestProcessor {
 		if (findFirst.isPresent()) {
 			Method method;
 			try {
-				method = dtoClazz.getDeclaredMethod(methodName, converter.getType());
+				method = dtoClazz.getDeclaredMethod(methodName, clazz);
 				method.setAccessible(true);
 				method.invoke(object, converter.convert(stringValue));
 			} catch (NoSuchMethodException | SecurityException |
