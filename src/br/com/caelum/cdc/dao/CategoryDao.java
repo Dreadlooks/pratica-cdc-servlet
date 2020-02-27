@@ -30,6 +30,20 @@ public class CategoryDao {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public void update(Category category) {
+		String sql = "update category set name = ? where id = ?";
+
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, category.getName());
+			stmt.setLong(2, category.getId());
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	public List<Category> findAll() {
 		String sql = "select * from category";
@@ -91,5 +105,30 @@ public class CategoryDao {
 			// TODO Auto-generated catch block
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public Optional<Category> findById(Long id) {
+		Optional<Category> possibleCategory = Optional.empty();
+		String sql = "select * from category where id = ?";
+
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setLong(1, id);
+
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				Category category = new Category(rs.getString("name"));
+				category.setId(id);
+				possibleCategory = Optional.of(category);
+			}
+
+			rs.close();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		return possibleCategory;
 	}
 }

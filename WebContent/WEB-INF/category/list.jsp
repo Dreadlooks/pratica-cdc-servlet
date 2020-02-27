@@ -22,7 +22,7 @@
 			<tr>
 				<td>${category.id}</td>
 				<td>${category.name}</td>
-				<td><a href="">atualiza</a></td>
+				<td><a href="/pratica-cdc-servlet/update/category?id=${category.id}">atualizar</a></td>
 				<td><a href="/pratica-cdc-servlet/delete/category?id=${category.id}">remover</a></td>
 			</tr>
 		</c:forEach>

@@ -2,7 +2,7 @@ package br.com.caelum.cdc.model;
 
 import br.com.caelum.cdc.shared.annotations.Size;
 
-public class CategoryDto {
+public class CategoryDto implements RequiredCategoryFields {
 	
 	@Size(max = 30, min = 1)
 	private String name;

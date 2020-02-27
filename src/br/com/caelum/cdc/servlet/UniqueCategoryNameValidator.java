@@ -4,9 +4,10 @@ import java.util.Optional;
 
 import br.com.caelum.cdc.dao.CategoryDao;
 import br.com.caelum.cdc.model.CategoryDto;
+import br.com.caelum.cdc.model.RequiredCategoryFields;
 import br.com.caelum.cdc.shared.validators.UniqueFieldValidator;
 
-public class UniqueCategoryNameValidator extends UniqueFieldValidator<CategoryDto> {
+public class UniqueCategoryNameValidator extends UniqueFieldValidator<RequiredCategoryFields> {
 
 	private CategoryDao categoryDao;
 	
@@ -15,7 +16,7 @@ public class UniqueCategoryNameValidator extends UniqueFieldValidator<CategoryDt
 	}
 	
 	@Override
-	public Optional getFieldToSearch(CategoryDto object) {
+	public Optional getFieldToSearch(RequiredCategoryFields object) {
 		// TODO Auto-generated method stub
 		return categoryDao.findByName(object.getName());
 	}

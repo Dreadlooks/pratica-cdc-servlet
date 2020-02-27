@@ -24,4 +24,8 @@ public class Category {
 	public String getName() {
 		return this.name;
 	}
+	
+	public void update(RequiredCategoryFields update) {
+		this.name = update.getName();
+	}
 }
