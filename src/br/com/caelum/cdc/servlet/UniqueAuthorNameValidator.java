@@ -1,21 +1,27 @@
 package br.com.caelum.cdc.servlet;
 
-import br.com.caelum.cdc.dao.AuthorDao;
-import br.com.caelum.cdc.shared.errors.BindingResult;
+import java.util.Optional;
 
-public class UniqueAuthorNameValidator {
+import br.com.caelum.cdc.dao.AuthorDao;
+import br.com.caelum.cdc.model.AuthorDto;
+
+public class UniqueAuthorNameValidator extends UniqueFieldValidator<AuthorDto> {
 
 	private AuthorDao authorDao;
-	private BindingResult result;
 	
-	public UniqueAuthorNameValidator(AuthorDao authorDao, BindingResult result) {
+	public UniqueAuthorNameValidator(AuthorDao authorDao) {
 		this.authorDao = authorDao;
-		this.result = result;
 	}
 
-	public void checkUniqueKey(String name) {
-		if (authorDao.findByName(name).isPresent()) {
-			result.addError("name", "Já existe um autor com este nome -> " + name);
-		}
+	@Override
+	public Optional getFieldToSearch(AuthorDto authorDto) {
+		// TODO Auto-generated method stub
+		return authorDao.findByName(authorDto.getName());
+	}
+
+	@Override
+	public String getInvalidField() {
+		// TODO Auto-generated method stub
+		return "name";
 	}
 }

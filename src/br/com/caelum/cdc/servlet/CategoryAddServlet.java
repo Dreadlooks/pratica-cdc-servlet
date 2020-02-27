@@ -32,9 +32,12 @@ public class CategoryAddServlet extends HttpServlet {
 
 		CategoryDao categoryDao = new CategoryDao(connection);
 		ValidatorsUtil validatorsUtil = new ValidatorsUtil(result);
+		UniqueCategoryNameValidator uniqueCategoryNameValidator = 
+				new UniqueCategoryNameValidator(categoryDao);
 		
 		CategoryDto categoryDto = RequestProcessor.process(request, CategoryDto.class);
 		validatorsUtil.validate(categoryDto);
+		uniqueCategoryNameValidator.validate(categoryDto, result);
 		
 		if (result.hasErrors()) {
 			request.setAttribute("categoryDto", categoryDto);

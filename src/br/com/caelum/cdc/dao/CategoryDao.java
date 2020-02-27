@@ -53,4 +53,29 @@ public class CategoryDao {
 		
 		return categories;
 	}
+	
+	public Optional<Category> findByName(String name) {
+		Optional<Category> possibleCategory = Optional.empty();
+		String sql = "select * from category where name = ?";
+		
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, name);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				Category category = new Category(rs.getString("name"));
+				category.setId(rs.getLong("id"));
+				possibleCategory = Optional.of(category);
+			}
+			
+			rs.close();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return possibleCategory;
+	} 
 }
