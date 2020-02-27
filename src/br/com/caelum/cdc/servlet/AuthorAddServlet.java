@@ -34,11 +34,11 @@ public class AuthorAddServlet extends HttpServlet {
 		BindingResult result = (BindingResult) request.getAttribute("bindingResult");
 		AuthorDao authorDao = new AuthorDao(connection);
 		ValidatorsUtil validatorsUtil = new ValidatorsUtil(result);
-		UniqueAuthorNameValidator uniqueAuthorNameValidator = new UniqueAuthorNameValidator(authorDao, result);
+		UniqueAuthorNameValidator uniqueAuthorNameValidator = new UniqueAuthorNameValidator(authorDao);
 		
 		AuthorDto authorDto = RequestProcessor.process(request, AuthorDto.class);
 		validatorsUtil.validate(authorDto);
-		uniqueAuthorNameValidator.checkUniqueKey(authorDto.getName());		
+		uniqueAuthorNameValidator.validate(authorDto, result);		
 		
 		if (result.hasErrors()) {
 			request.setAttribute("authorDto", authorDto);
