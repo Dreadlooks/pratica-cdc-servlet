@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import br.com.caelum.cdc.dao.AuthorDao;
 import br.com.caelum.cdc.model.AuthorDto;
+import br.com.caelum.cdc.shared.validators.UniqueFieldValidator;
 
 public class UniqueAuthorNameValidator extends UniqueFieldValidator<AuthorDto> {
 

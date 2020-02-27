@@ -1,4 +1,4 @@
-package br.com.caelum.cdc.servlet;
+package br.com.caelum.cdc.shared.validators;
 
 import java.util.Optional;
 

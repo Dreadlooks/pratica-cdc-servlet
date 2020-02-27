@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import br.com.caelum.cdc.dao.CategoryDao;
 import br.com.caelum.cdc.model.CategoryDto;
+import br.com.caelum.cdc.shared.validators.UniqueFieldValidator;
 
 public class UniqueCategoryNameValidator extends UniqueFieldValidator<CategoryDto> {
 
