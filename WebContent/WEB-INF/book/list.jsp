@@ -34,8 +34,8 @@
 				<td>${book.author.name}</td>
 				<td>${book.numberOfPages}</td>
 				<td>${book.isbn}</td>
-				<td><a href="/pratica-cdc-servlet/update/category?id=${book.id}">atualizar</a></td>
-				<td><a href="/pratica-cdc-servlet/delete/category?id=${book.id}">remover</a></td>
+				<td><a href="/pratica-cdc-servlet/update/book?id=${book.id}">atualizar</a></td>
+				<td><a href="/pratica-cdc-servlet/delete/book?id=${book.id}">remover</a></td>
 			</tr>
 		</c:forEach>
 	</table>

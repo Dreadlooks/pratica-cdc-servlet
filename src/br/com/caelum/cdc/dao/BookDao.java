@@ -106,4 +106,16 @@ public class BookDao {
 		return possibleBook;
 	}
 
+	public void deleteById(Long id) {
+		String sql = "delete from book where id = ?";
+
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setLong(1, id);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
