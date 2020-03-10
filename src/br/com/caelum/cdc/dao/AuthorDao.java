@@ -43,7 +43,7 @@ public class AuthorDao {
 			while (rs.next()) {
 				Author author = new Author(rs.getString("name"), rs.getString("description"));
 				author.setId(rs.getLong("id"));
-				
+
 				authors.add(author);
 			}
 			rs.close();
@@ -51,34 +51,58 @@ public class AuthorDao {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		return authors;
 	}
-	
-	
+
 	public Optional<Author> findByName(String name) {
 		Optional<Author> possibleAuthor = Optional.empty();
 		String sql = "select * from author where name = ?";
-		
+
 		try {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, name);
-			
+
 			ResultSet rs = stmt.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				Author author = new Author(rs.getString("name"), rs.getString("description"));
 				author.setId(rs.getLong("id"));
 				possibleAuthor = Optional.of(author);
 			}
-			
+
 			rs.close();
 			stmt.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-		
+
 		return possibleAuthor;
-	} 
+	}
+
+	public Optional<Author> findById(Long id) {
+		Optional<Author> possibleAuthor = Optional.empty();
+		String sql = "select * from author where id = ?";
+
+		try {
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setLong(1, id);
+
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				Author author = new Author(rs.getString("name"), rs.getString("description"));
+				author.setId(id);
+				possibleAuthor = Optional.of(author);
+			}
+
+			rs.close();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		return possibleAuthor;
+	}
 
 }

@@ -14,7 +14,6 @@ import br.com.caelum.cdc.dao.AuthorDao;
 import br.com.caelum.cdc.model.AuthorDto;
 import br.com.caelum.cdc.shared.RequestProcessor;
 import br.com.caelum.cdc.shared.errors.BindingResult;
-import br.com.caelum.cdc.shared.errors.ConcreteBindingResult;
 import br.com.caelum.cdc.shared.validators.ValidatorsUtil;
 
 @WebServlet("/author")
