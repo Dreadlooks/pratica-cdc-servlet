@@ -76,4 +76,12 @@ public class Book {
 	public String getIsbn() {
 		return isbn;
 	}
+	
+	public void update(RequiredBookFields requiredBookFields) {
+		this.title = requiredBookFields.getTitle();
+		this.price = requiredBookFields.getPrice();
+		this.resume = requiredBookFields.getResume();
+		this.numberOfPages = requiredBookFields.getNumberOfPages();
+		this.isbn = requiredBookFields.getIsbn();
+	}
 }

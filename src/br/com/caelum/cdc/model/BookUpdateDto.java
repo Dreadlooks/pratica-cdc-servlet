@@ -2,16 +2,14 @@ package br.com.caelum.cdc.model;
 
 import java.math.BigDecimal;
 
-import br.com.caelum.cdc.dao.AuthorDao;
-import br.com.caelum.cdc.dao.CategoryDao;
 import br.com.caelum.cdc.shared.annotations.Min;
 import br.com.caelum.cdc.shared.annotations.NotNull;
 import br.com.caelum.cdc.shared.annotations.OnlyNumbers;
 import br.com.caelum.cdc.shared.annotations.Size;
-import br.com.caelum.cdc.shared.exceptions.AuthorNotFoundException;
-import br.com.caelum.cdc.shared.exceptions.CategoryNotFoundException;
 
-public class BookDto implements RequiredBookFields {
+public class BookUpdateDto implements RequiredBookFields {
+	
+	private Long id;
 
 	@Size(max = 255, min = 1)
 	private String title;
@@ -31,6 +29,14 @@ public class BookDto implements RequiredBookFields {
 	
 	@OnlyNumbers
 	private String isbn;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getTitle() {
 		return title;
@@ -86,15 +92,5 @@ public class BookDto implements RequiredBookFields {
 
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
-	}
-
-	public Book toModel(CategoryDao categoryDao, AuthorDao authorDao) {
-		Category category = categoryDao
-				.findById(this.categoryId).orElseThrow(() -> new CategoryNotFoundException());
-		
-		Author author = authorDao.findById(this.authorId).orElseThrow(() -> new AuthorNotFoundException());
-		
-		return new Book(this.title, category, this.price, this.resume, author, 
-				this.numberOfPages, this.isbn);		
 	}
 }
