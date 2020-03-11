@@ -77,11 +77,13 @@ public class Book {
 		return isbn;
 	}
 	
-	public void update(RequiredBookFields requiredBookFields) {
+	public void update(RequiredBookFields requiredBookFields, Author updatedAuthor, Category updatedCategory) {
 		this.title = requiredBookFields.getTitle();
 		this.price = requiredBookFields.getPrice();
 		this.resume = requiredBookFields.getResume();
 		this.numberOfPages = requiredBookFields.getNumberOfPages();
 		this.isbn = requiredBookFields.getIsbn();
+		this.author = updatedAuthor;
+		this.category = updatedCategory;
 	}
 }

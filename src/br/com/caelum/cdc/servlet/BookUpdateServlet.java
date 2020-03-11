@@ -43,6 +43,8 @@ public class BookUpdateServlet extends HttpServlet {
 			request.setAttribute("authors", authorDao.findAll());
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/book/update-book.jsp");
 			rd.forward(request, response);
+		} else {
+			 response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
 
@@ -53,6 +55,9 @@ public class BookUpdateServlet extends HttpServlet {
 		BindingResult result = (BindingResult) request.getAttribute("bindingResult");
 
 		BookDao bookDao = new BookDao(connection);
+		AuthorDao authorDao = new AuthorDao(connection);
+		CategoryDao categoryDao = new CategoryDao(connection);
+		
 		ValidatorsUtil validatorsUtil = new ValidatorsUtil(result);
 		UniqueBookTitleValidator uniqueBookTitleValidator = new UniqueBookTitleValidator(bookDao);
 
@@ -66,7 +71,8 @@ public class BookUpdateServlet extends HttpServlet {
 			doGet(request, response);
 		} else {
 			Book book = bookDao.findById(bookDto.getId()).orElseThrow(() -> new BookNotFoundException());
-			book.update(bookDto);
+			book.update(bookDto, authorDao.findById(bookDto.getAuthorId()).get(),
+					categoryDao.findById(bookDto.getCategoryId()).get());
 			bookDao.update(book);
 			response.sendRedirect("/pratica-cdc-servlet/books");
 		}
