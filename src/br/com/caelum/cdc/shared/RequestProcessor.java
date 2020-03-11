@@ -1,8 +1,10 @@
 package br.com.caelum.cdc.shared;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -16,14 +18,17 @@ import javax.servlet.http.HttpServletRequest;
 public class RequestProcessor {
 	
 	static Map<Class, Converter> converters = new HashMap<>() {{
-		put(String.class, new StringConverter());
 		put(double.class, new PrimitiveDoubleToDouble());
+		put(int.class, new PrimitiveIntConverter());
+		put(String.class, new StringConverter());
+		put(Long.class, new LongConverter());
+		put(BigDecimal.class, new BigDecimalConverter());
 	}};
 	
-	public static <T extends Object> T process(HttpServletRequest request, Class<T> dtoClazz) {
+	public static <T extends Object> T process(HttpServletRequest request, Class<T> dtoClazz) throws UnsupportedEncodingException {
 
 		Object object = getClazzInstance(dtoClazz);
-		
+		request.setCharacterEncoding("UTF-8");
 		// GET THE FIELDS THAT EXISTS IN YOUR CLASS
 		List<Field> fields = Arrays.asList(dtoClazz.getDeclaredFields());
 		fields.stream().forEach(field -> {
@@ -48,7 +53,6 @@ public class RequestProcessor {
 				.collect(Collectors.toSet());
 		
 		String methodName = getSetterNameFromParameterKey(key);
-		
 		Optional<Method> findFirst = setters.stream()
 				.filter(set -> set.getName().equals(methodName)).findFirst();
 		
@@ -77,6 +81,6 @@ public class RequestProcessor {
 	}
 
 	private static String getSetterNameFromParameterKey(String param) {
-		return "set" + param.substring(0, 1).toUpperCase() + param.substring(1).toLowerCase();
+		return "set" + param.substring(0, 1).toUpperCase() + param.substring(1);
 	}
 }

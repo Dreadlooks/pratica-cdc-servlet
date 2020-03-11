@@ -15,7 +15,7 @@ public class SizeVerificator implements ConstraintValidator<Object> {
 		try {
 			word = field.get(objectString).toString();
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
+			System.out.println("There's no method to access your property!");
 			throw new RuntimeException(e);
 		}
 		
